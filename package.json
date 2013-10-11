@@ -10,15 +10,12 @@
   "bugs": {
     "url": "https://github.com/thebigredgeek/angulartodo/issues"
   },
-  "scripts":{
-    "install":"bower install",
+  "scripts": {
+    "install": "bower install",
     "start": "node server.js 80",
-    "test":"grunt build"
+    "test": "grunt build"
   },
   "devDependencies": {
-    "express": "~3.4.0",
-    "grunt-plato": "~0.2.1",
-    "grunt-docular": "~0.1.2",
     "grunt-angular-templates": "~0.4.1",
     "grunt-contrib-cssmin": "~0.6.2",
     "grunt-contrib-watch": "~0.5.3",
@@ -36,5 +33,9 @@
     "grunt-contrib-concat": "~0.3.0",
     "grunt-bump": "0.0.11"
   },
-  "keywords": []
+  "keywords": [],
+  "dependencies": {
+    "cors": "~2.0.0",
+    "express": "~3.4.0"
+  }
 }
