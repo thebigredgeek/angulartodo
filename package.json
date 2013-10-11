@@ -11,6 +11,7 @@
     "url": "https://github.com/thebigredgeek/angulartodo/issues"
   },
   "scripts":{
+    "install":"bower install",
     "test":"grunt build"
   },
   "devDependencies": {
