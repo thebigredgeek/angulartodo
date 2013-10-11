@@ -12,6 +12,7 @@
   },
   "scripts":{
     "install":"bower install",
+    "start": "node server.js 80",
     "test":"grunt build"
   },
   "devDependencies": {
