@@ -10,10 +10,13 @@
   "bugs": {
     "url": "https://github.com/thebigredgeek/angulartodo/issues"
   },
+  "scripts":{
+    "test":"grunt build"
+  },
   "devDependencies": {
     "express": "~3.4.0",
     "grunt-plato": "~0.2.1",
-    "grunt-docular": "latest",
+    "grunt-docular": "~0.1.2",
     "grunt-angular-templates": "~0.4.1",
     "grunt-contrib-cssmin": "~0.6.2",
     "grunt-contrib-watch": "~0.5.3",
