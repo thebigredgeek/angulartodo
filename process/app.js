@@ -117,7 +117,6 @@ angular.module("angulartodo").controller('todoController',[
         };
 
 }]);
-
 angular.module("angulartodo").factory("urlRegEx",[
     function(){
         return {
