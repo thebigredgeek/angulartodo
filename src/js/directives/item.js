@@ -14,6 +14,11 @@ angular.module('angulartodo').directive('item',[
         definition.restrict     =   "E";                        // This restricts the directive to an element form
         definition.controller   =   "itemController";           // Use the itemController as the controller
         definition.templateUrl  =   "directives/item.html";     // Use the item.html partial for the template
+        definition.require      =   [                           // Directives used within template
+            'linkItem',
+            'textItem',
+            'youtubeItem'
+        ];
 
         definition.link         =   angular.noop;               // We aren't actually doing anything during the link, but we need to provide the member
           

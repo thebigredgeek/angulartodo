@@ -7,7 +7,6 @@
 angular.module('angulartodo').controller('youtubeItemController',[
             '$scope','$attrs',
     function($scope,  $attrs){
-
         $scope.text = $attrs.text;  //bind the text
         
 }]);

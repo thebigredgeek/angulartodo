@@ -23,17 +23,15 @@ angular.module('angulartodo').controller('itemController',[
 
         if(urlRegEx.youtube($attrs.text)){                                      //filter youtube (filter before link, as youtube would validate as a link)
             console.log('youtube item');
-            $scope.item = privateMembers.itemFactory('youtube',$attrs.text);    //build a youtube item
+            //$scope.item = privateMembers.itemFactory('youtube',$attrs.text);    //build a youtube item
         }
         else if(urlRegEx.link($attrs.text)){                                    //filter links
             console.log('link item');                                   
-            $scope.item = privateMembers.itemFactory('link',$attrs.text);       //build a link item
+            //$scope.item = privateMembers.itemFactory('link',$attrs.text);       //build a link item
         }
         else{                                                                   //default to regular rext
             console.log('text item');
-            $scope.item = privateMembers.itemFactory('text',$attrs.text);       //build a text item
-        }         
+            //$scope.item = privateMembers.itemFactory('text',$attrs.text);       //build a text item
+        }   
 
-
-        
 }]);
