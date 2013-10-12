@@ -22,7 +22,11 @@
                         </form>
                         <form role="form">
                             <div class="form-group" ng-repeat="task in tasks">
-                                <item text="task.text"></item>
+                                <div class="well">
+                                    <ng-include ng-if="task.type == 'youtube'" src="'partials/youtube.html'"></ng-include>
+                                    <ng-include ng-if="task.type == 'link'" src="'partials/link.html'"></ng-include>
+                                    <ng-include ng-if="task.type == 'text'" src="'partials/text.html'"></ng-include>
+                                </div>
                             </div>
                         </form>
                     </div>

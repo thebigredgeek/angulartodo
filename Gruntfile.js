@@ -35,21 +35,6 @@ module.exports = function(grunt){
                 "autowatch": false
             }
         },
-        "express":{
-            "server":{
-                "options":{
-                    "script":"server.js"
-                }
-            }
-        },
-        "concurrent":{
-            "environment":{
-                "tasks":["watch","express"],
-                "options":{
-                    "logConcurrentOutput":true
-                }
-            }
-        },
         "strip":{
             "dist":{
                 "src":"process/app.js",
@@ -204,8 +189,6 @@ module.exports = function(grunt){
             }
         }
     }
-    grunt.registerTask('default',["concurrent"]);
-    grunt.registerTask('develop',["clean:dist","jshint","concat",'ngtemplates',"uglify:app","cssmin","copy:maps","copy:images",'clean:process']);
-    grunt.registerTask('build',['clean:dist','jshint','karma:unit-pre','concat','strip','ngtemplates','uglify:app','cssmin',"copy:maps","copy:images",'karma:unit-post','clean:process']);
-    grunt.registerTask('dist',[ 'clean:dist','jshint','karma:unit-pre','concat','strip','ngtemplates','uglify:app','cssmin',"copy:maps","copy:images",'karma:unit-post','clean:process','bump']);
+    grunt.registerTask('default',["watch"]);
+    grunt.registerTask('develop',["clean:dist","jshint","concat",'ngtemplates',"uglify:app","cssmin","copy:maps","copy:images"]);
 };

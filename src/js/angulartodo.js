@@ -4,7 +4,10 @@
  * @module angulartodo
  * @name angulartodo
  */
-angular.module("angulartodo",[]).run([
+angular.module("angulartodo",[
+    'ui.bootstrap',  //ui bootstrap module
+    'ngSanitize'     //sanitation module
+]).run([
     
 
     /**

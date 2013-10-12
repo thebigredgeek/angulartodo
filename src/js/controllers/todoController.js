@@ -2,11 +2,15 @@
  * This is the todoController, which controls the Todo List view
  * @function
  * @name angulartodo#todoController
- * @param  {Object} $scope  An instance of $scope
+ * @param  {Object} $scope      An instance of $scope
+ * @param  {Object} urlRegEx    A URL regular expression service to identify our types
+ * @param  {Object} $sce        Strict Contextual Escaping service, to allow for setting the source on our iframe
+ * @param  {Object} $http       $http service
  */
 angular.module("angulartodo").controller('todoController',[
-            '$scope',
-    function($scope){
+            '$scope','urlRegEx','$sce','$http',
+    function($scope,  urlRegEx,  $sce,  $http){
+
         var publicMembers = $scope,
             privateMembers = {};
 
@@ -16,7 +20,23 @@ angular.module("angulartodo").controller('todoController',[
          * @return {Object}      Task prototype
          */
         privateMembers.taskFactory = function(text){
+            var type;
+
+            //http://www.youtube.com/embed/tgd6ENKK0mM
+
+            if(urlRegEx.isYoutube(text)){               //Is the text a youtube link?
+                type = "youtube";
+            }
+            else if(urlRegEx.isLink(text)){             //Is the text a regular link?
+                type = "link";
+            }
+            else{                                       //Default to text
+                type = "text";
+            }
+
             return {
+                title   : "",
+                type    : type,
                 text    : text,
                 status  : "active"
             };
@@ -47,15 +67,30 @@ angular.module("angulartodo").controller('todoController',[
          * @public
          */
         publicMembers.addTask = function(text){
-            publicMembers.$safeApply(function(){                            //Enforce digest
+            publicMembers.$safeApply(function(){                                //Enforce digest
 
-                publicMembers.tasks.push(privateMembers.taskFactory(text)); //Push in a new task
-            
-                publicMembers.task = "";                                    //Clear the task text
-            
-                console.log(publicMembers.list);                            //Debug!
+                var task;
+
+                publicMembers.tasks.unshift(privateMembers.taskFactory(text));  //Push in a new task
+                task = publicMembers.tasks[0];                                  //capture task reference
+
+                if(task.type == 'youtube'){                                     //Handle youtube title
+                    $http.post('/youtubeInfo',{id:'tgd6ENKK0mM'})
+                        .then(function(response){
+                            if(response.data.entry){
+                                task.title = response.data.entry.title.$t;
+                                console.log(task.title);
+                            }
+                        });
+                }
+
+                publicMembers.task = "";                                        //Clear the task text
             
             });
+        };
+
+        publicMembers.trustedSource = function(source){
+            return $sce.trustAsResourceUrl(source);
         };
 
 }]);

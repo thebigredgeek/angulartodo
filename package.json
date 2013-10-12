@@ -12,7 +12,7 @@
   },
   "scripts": {
     "install": "bower install",
-    "start": "node server.js 80",
+    "start": "node server.js",
     "test": "grunt build"
   },
   "devDependencies": {
@@ -37,6 +37,8 @@
   "keywords": [],
   "dependencies": {
     "cors": "~2.0.0",
-    "express": "~3.4.0"
+    "express": "~3.4.0",
+    "helmet": "~0.1.0",
+    "request": "~2.27.0"
   }
 }

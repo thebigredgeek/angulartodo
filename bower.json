@@ -12,7 +12,8 @@
   "dependencies": {
     "angular-bootstrap": "~0.6.0",
     "bootstrap-css": "~3.0.0",
-    "angular": "1.2.0-rc.2"
+    "angular": "1.2.0-rc.2",
+    "angular-sanitize": "1.2.0-rc.2"
   },
   "devDependencies": {
     "angular": "~1.0.8",
