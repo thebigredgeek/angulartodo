@@ -2,18 +2,32 @@
 <html lang="en" ng-app="angulartodo">
     <head>
         <meta charset="utf-8">
-        <title>angulartodo</title>
+        <title>TodoMVC</title>
         <script src="vendor.js"></script>
         <script src="app.js"></script>
         <link rel="stylesheet" href="app.css"/>
     </head>
     <body>
-        <div>angulartodo</div>
-        <div ng-controller="demoControllerRoot">
-            <ul>
-                <li ng-repeat = "(key,val) in rows">List item {{key}}</li>
-            </ul>
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <a href="" class="navbar-brand">Angular TodoMVC</a>
+        </nav>
+        <div class="root-content-margin-box" ng-controller="todoController">
+            <div class="root-content-border-box">
+                <div class="root-content-padding-box">
+                    <div class="root-content-content-box">
+                        <form role="form" ng-submit="addTask(task);">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Enter a task" ng-model="task"/>
+                            </div>
+                        </form>
+                        <form role="form">
+                            <div class="form-group" ng-repeat="task in tasks">
+                                <item text="task.text"></item>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div ng-view></div>
     </body>
 </html>

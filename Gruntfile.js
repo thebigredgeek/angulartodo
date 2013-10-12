@@ -66,7 +66,7 @@ module.exports = function(grunt){
         "cssmin":{
             "options":{
                 "banner": "/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today('dd/mm/yyyy') %> */",
-                "report":"gzip"
+                "report":false
             },
             "dist":{
                 "files":{
@@ -93,7 +93,7 @@ module.exports = function(grunt){
                 "src/**/*.*",
                 "test/**/*.spec.js"
             ],
-            "tasks":["test"],
+            "tasks":["develop"],
             "options":{
                 "livereload":true,
                 "atBegin":true
@@ -133,7 +133,7 @@ module.exports = function(grunt){
         "uglify":{
             "options":{
                 "mangle":false,
-                "report":"min",
+                "report":false,
                 "wrap":true,
                 "compress":{
                     "dead_code":true,
@@ -155,7 +155,7 @@ module.exports = function(grunt){
                 "options":{
                     "sourceMap":"dist/app.map",
                     "sourceMappingURL":"app.map",
-                    "report":"gzip",
+                    "report":false,
                     "banner": "/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today('yyyy-mm-dd') %> */"
                 },
                 "files":{
@@ -180,6 +180,19 @@ module.exports = function(grunt){
                         "filter":"isFile"
                     }
                 ]
+            },
+            "images":{
+                "files":[
+                    {
+                        "expand":true,
+                        "flatten":true,
+                        "src":[
+                            "src/images/**/*.*"
+                        ],
+                        "dest":"dist/images/",
+                        "filter":"isFile"
+                    }
+                ]
             }
         }
     });
@@ -192,8 +205,7 @@ module.exports = function(grunt){
         }
     }
     grunt.registerTask('default',["concurrent"]);
-
-    grunt.registerTask('test',[ 'clean:dist','jshint','karma:unit-pre','concat','strip','ngtemplates','uglify:app','cssmin',"copy:maps"]);
-    grunt.registerTask('build',['clean:dist','jshint','karma:unit-pre','concat','strip','ngtemplates','uglify:app','cssmin',"copy:maps",'karma:unit-post']);
-    grunt.registerTask('dist',[ 'clean:dist','jshint','karma:unit-pre','concat','strip','ngtemplates','uglify:app','cssmin',"copy:maps",'karma:unit-post','bump']);
+    grunt.registerTask('develop',["clean:dist","jshint","concat",'ngtemplates',"uglify:app","cssmin","copy:maps","copy:images",'clean:process']);
+    grunt.registerTask('build',['clean:dist','jshint','karma:unit-pre','concat','strip','ngtemplates','uglify:app','cssmin',"copy:maps","copy:images",'karma:unit-post','clean:process']);
+    grunt.registerTask('dist',[ 'clean:dist','jshint','karma:unit-pre','concat','strip','ngtemplates','uglify:app','cssmin',"copy:maps","copy:images",'karma:unit-post','clean:process','bump']);
 };

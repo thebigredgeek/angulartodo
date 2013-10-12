@@ -1,4 +1,5 @@
 {
     "link":[
+        "vendor/managed/bootstrap-css/css/bootstrap.min.css"
     ]
 }
