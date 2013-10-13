@@ -1,6 +1,5 @@
 var request     = require('request'),                                       //Request
     jsdom       = require('jsdom'),                                         //JSDom
-    openGraph   = require('ogp'),                                           //Open Graph Protocol parser
     express     = require('express'),                                       //Expressjs framework
     server      = express(),                                                //Server instance
     cors        = require('cors'),                                          //CORS middleware
