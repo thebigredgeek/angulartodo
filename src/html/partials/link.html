@@ -1,1 +1,5 @@
-Link
+
+<img ng-show = "!task.text && !task.link" src="images/loader.gif" alt="Loading..."/>
+<div><strong ng-show = "task.title">{{task.title}}</strong></div>
+<a href="{{task.link}}" ng-show = "task.link">{{task.link}}</a>
+<img ng-show = "task.text" ng-src="{{task.text}}" alt="Image could not be loaded"/>

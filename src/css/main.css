@@ -16,3 +16,8 @@ body{
 .root-content-content-box{
 
 }
+
+
+.done{
+    text-decoration: line-through;
+}

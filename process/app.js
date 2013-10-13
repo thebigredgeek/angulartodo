@@ -38,6 +38,13 @@ angular.module("angulartodo").controller('todoController',[
             privateMembers = {};
 
         /**
+         * Task index
+         * @type {Number}
+         */
+        privateMembers.index = 0;
+
+
+        /**
          * This function returns a new task prototype
          * @param  {String} text Task text
          * @return {Object}      Task prototype
@@ -48,7 +55,8 @@ angular.module("angulartodo").controller('todoController',[
             //http://www.youtube.com/embed/tgd6ENKK0mM
 
             if(urlRegEx.isYoutube(text)){               //Is the text a youtube link?
-                type = "youtube";
+                text = urlRegEx.getVideoId(text);       //Extract the ID
+                type = "youtube";                       //Set the type
             }
             else if(urlRegEx.isLink(text)){             //Is the text a regular link?
                 type = "link";
@@ -57,10 +65,12 @@ angular.module("angulartodo").controller('todoController',[
                 type = "text";
             }
 
-            return {
+            return {                                    //Return a prototype
+                id      : privateMembers.index++,
                 title   : "",
                 type    : type,
                 text    : text,
+                link    : null,
                 status  : "active"
             };
         };
@@ -82,6 +92,8 @@ angular.module("angulartodo").controller('todoController',[
          */
         publicMembers.tasks = [];
 
+
+
         /**
          * This function adds a task to the list, and clears the current task text
          * @function
@@ -92,39 +104,105 @@ angular.module("angulartodo").controller('todoController',[
         publicMembers.addTask = function(text){
             publicMembers.$safeApply(function(){                                //Enforce digest
 
-                var task;
+                var task,temp;                                                  //Scope'd references
 
                 publicMembers.tasks.unshift(privateMembers.taskFactory(text));  //Push in a new task
                 task = publicMembers.tasks[0];                                  //capture task reference
 
+
+
+
+
+
                 if(task.type == 'youtube'){                                     //Handle youtube title
-                    $http.post('/youtubeInfo',{id:'tgd6ENKK0mM'})
-                        .then(function(response){
-                            if(response.data.entry){
-                                task.title = response.data.entry.title.$t;
-                                console.log(task.title);
+                    $http.post('/youtubeInfo',{id:task.text})                   //Call for more info
+                        .then(function(response){                               //Handle reply
+                            if(response.data.entry){                            //Check for valid data
+                                task.title = response.data.entry.title.$t;      //Apply data to title
                             }
                         });
                 }
+
+
+
+
+
+
+
+                if(task.type == 'link'){                                        //Handle link open graph
+                    temp = task.text;
+                    task.text = null;                                           //Null out the text to begin with
+                    $http.post('/linkInfo',{url:text})                          //Grab Open Graph data about this link (if it exists)
+                        .then(function(response){                               //Handle return
+                            var title, image, i;
+                            if(response.data){                                  //Validate data
+                                for(i=0; i<response.data.length;i++){
+                                    if(response.data[i][0] == 'og:title'){      //parse the og title
+                                        task.title = response.data[i][1];
+                                    }
+                                    if(response.data[i][0] == 'og:image'){      //parse the og image
+                                        task.text = response.data[i][1];
+                                    }
+                                    if(response.data[i][0] == 'title'){         //parse the meta title
+                                        task.title = response.data[i][1];
+                                    }
+                                    if(response.data[i][0] == 'image'){         //parse the meta image
+                                        task.text = response.data[i][1];   
+                                    }
+                                }
+                                if(!task.text){         //if there weren't valid open graph tags, just default to the link!
+                                    task.link = temp;
+                                }
+                            }
+                            else{   //Default to the link if there was some sort of error
+                                task.link = temp;
+                            }
+                        });
+                }
+
+
+
+
 
                 publicMembers.task = "";                                        //Clear the task text
             
             });
         };
 
+        /**
+         * This function creates a trusted source wrapper for the iframe used by youtube
+         * @param  {String} source The source string
+         * @return {Object}        An escaped source
+         */
         publicMembers.trustedSource = function(source){
             return $sce.trustAsResourceUrl(source);
+        };
+
+        /**
+         * This function deletes an item from the task list
+         * @param  {Integer} id The task ID
+         */
+        publicMembers.deleteTask = function(id){
+            var i;
+            for(i=0;i<publicMembers.tasks.length;i++){ //O(n)
+                if(publicMembers.tasks[i].id == id){
+                    publicMembers.tasks.splice(i,1); //remove the task
+                }
+            }
         };
 
 }]);
 angular.module("angulartodo").factory("urlRegEx",[
     function(){
         return {
+            getVideoId: function(string){ //parses out the video ID
+                return string.match(/.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/)[1]; //return the video id
+            },
             isYoutube : function(string){ //Regular expression for youtube links
                 return (/^(http|https):\/\/+(www.youtube.com\/watch\?v=|www.youtu.be\/|www.youtube.com\/embed\/)+\w{11}/).test(string);
             },
             isLink    : function(string){ //Regular expression for links
-                return (/^(http|https):\/\//).test(string);
+                return (/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/).test(string);
             }
         };
 }]);
